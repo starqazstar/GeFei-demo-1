@@ -10,6 +10,13 @@
     <h1>GeFei Domain Checker</h1>
     <form id="domainForm">
         <input type="text" id="domainInput" placeholder="Enter a domain name">
+        <select id="suffixSelect">
+            <option value="com">.com</option>
+            <option value="net">.net</option>
+            <option value="org">.org</option>
+            <option value="me">.me</option>
+            <!-- 更多后缀选项... -->
+        </select>
         <button type="submit">Check Domain</button>
     </form>
     <div id="result"></div>
@@ -19,15 +26,21 @@
     e.preventDefault();
 
     var domain = document.getElementById('domainInput').value;
+    var suffix = document.getElementById('suffixSelect').value;
     var resultDiv = document.getElementById('result');
 
-    // 模拟检查域名是否已注册
-    var isRegistered = Math.random() < 0.5; // 随机决定是否已注册
-    var registrationDate = isRegistered ? new Date().toISOString().split('T')[0] : 'N/A';
-
-    resultDiv.innerHTML = `<p>Domain: ${domain}</p>
-                           <p>Status: ${isRegistered ? 'Registered' : 'Not Registered'}</p>
-                           <p>Registration Date: ${registrationDate}</p>`;
+    fetch(`https://whois.freeaiapi.xyz/?name=${domain}&suffix=${suffix}`)
+        .then(response => response.json())
+        .then(data => {
+            // 处理并显示返回的数据
+            resultDiv.innerHTML = `<p>Domain: ${domain}.${suffix}</p>
+                                   <p>Status: ${data.registered ? 'Registered' : 'Not Registered'}</p>
+                                   <p>Registration Date: ${data.registered ? data.creationDate : 'N/A'}</p>
+                                   <p>WHOIS Information: <pre>${JSON.stringify(data, null, 2)}</pre></p>`;
+        })
+        .catch(error => {
+            resultDiv.innerHTML = `<p>Error: Unable to fetch domain information.</p>`;
+        });
 });
 
     </script>
