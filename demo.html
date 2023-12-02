@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GeFei Domain Checker</title>
+</head>
+<body>
+    <h1>GeFei Domain Checker</h1>
+    <form id="domainForm">
+        <input type="text" id="domainInput" placeholder="Enter a domain name">
+        <button type="submit">Check Domain</button>
+    </form>
+    <div id="result"></div>
+
+    <script>
+        document.getElementById('domainForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+
+    var domain = document.getElementById('domainInput').value;
+    var resultDiv = document.getElementById('result');
+
+    // 模拟检查域名是否已注册
+    var isRegistered = Math.random() < 0.5; // 随机决定是否已注册
+    var registrationDate = isRegistered ? new Date().toISOString().split('T')[0] : 'N/A';
+
+    resultDiv.innerHTML = `<p>Domain: ${domain}</p>
+                           <p>Status: ${isRegistered ? 'Registered' : 'Not Registered'}</p>
+                           <p>Registration Date: ${registrationDate}</p>`;
+});
+
+    </script>
+</body>
+</html>
